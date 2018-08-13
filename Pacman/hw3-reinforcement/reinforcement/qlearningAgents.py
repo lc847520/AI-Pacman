@@ -52,6 +52,8 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         "*** YOUR CODE HERE ***"
+        #print("[QLearningAgent::getQValue]: (state, action) = (%s, %s)\n" % (state, action))
+        print("[QLearningAgent::getQValue]:QValue size = %s, action = %s\n" % (len(self.QValues), action))
         return self.QValues[(state, action)]
 
         util.raiseNotDefined()
@@ -133,6 +135,8 @@ class QLearningAgent(ReinforcementAgent):
         #else:
         self.QValues[(state, action)] = (1-self.alpha) * curQValue + self.alpha * (reward \
                                           + self.discount * self.getValue(nextState) )
+        print("[QLearningAgent::update]: QValue size = %s, action = %s" % (len(self.QValues), action))
+        #print("[QLearningAgent::update]: (action, values) = (%s, %s)\n" % (action, self.QValues[(state, action)]))
         #util.raiseNotDefined()
 
     def getPolicy(self, state):
@@ -187,6 +191,8 @@ class ApproximateQAgent(PacmanQAgent):
         PacmanQAgent.__init__(self, **args)
         self.weights = util.Counter()
 
+        print("[ApproximateQAgent]: featExtractor = %s.\n" % self.featExtractor)
+
     def getWeights(self):
         return self.weights
 
@@ -199,6 +205,7 @@ class ApproximateQAgent(PacmanQAgent):
         QValue = 0.0 
         features = self.featExtractor.getFeatures(state, action)
         #print 'features', features
+        print("[ApproximateQAgent::getQValue]: features number = %s, features = %s" % (len(features), features))
         for feature in features:
           #print feature
           QValue += features[feature] * self.weights[feature]
@@ -216,6 +223,7 @@ class ApproximateQAgent(PacmanQAgent):
         for feature in features:
           self.weights[feature] += self.alpha * difference * features[feature]
 
+        print("[ApproximateQAgent::update]: weights = %s.\n" % self.weights)
         #util.raiseNotDefined()
 
     def final(self, state):

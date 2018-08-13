@@ -619,6 +619,7 @@ def replayGame( layout, actions, display ):
             # Execute the action
         state = state.generateSuccessor( *action )
         # Change the display
+        print("[replayGame]: display update.\n")
         display.update( state.data )
         # Allow for game specific conditions (winning, losing, etc.)
         rules.process(state, game)
@@ -629,6 +630,9 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
     import __main__
     __main__.__dict__['_display'] = display
 
+    print("[runGames]: layout = %s, pacman = %s, ghosts = %s, dispaly = %s, numGames = %s, record = %s, \
+            numTraining = %s, catchExceptions = %s, timeout = %s." % (layout, pacman, ghosts, display, \
+                                                                      numGames, record, numTraining, catchExceptions, timeout))
     rules = ClassicGameRules(timeout)
     games = []
 
@@ -638,12 +642,15 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
                 # Suppress output and graphics
             import textDisplay
             gameDisplay = textDisplay.NullGraphics()
+            #gameDisplay = display
             rules.quiet = True
         else:
             gameDisplay = display
             rules.quiet = False
+        #print("[runGames]: gameDisplay = %s\n" % gameDisplay)
         game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions)
         game.run()
+        #print("[runGames]: agents = %s" % game.agents)
         if not beQuiet: games.append(game)
 
         if record:
@@ -677,6 +684,7 @@ if __name__ == '__main__':
     > python pacman.py --help
     """
     args = readCommand( sys.argv[1:] ) # Get game components based on input
+    print("main: args = %s" % args)
     runGames( **args )
 
     # import cProfile

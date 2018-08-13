@@ -568,11 +568,13 @@ class Game:
         """
         Main control loop for game play.
         """
+        #print("[Game::run]: state.data = %s\n" % self.state.data)
         self.display.initialize(self.state.data)
         self.numMoves = 0
 
         ###self.display.initialize(self.state.makeObservation(1).data)
         # inform learning agents of the game start
+        #print("[Game::run]: agents = %s" % self.agents)
         for i in range(len(self.agents)):
             agent = self.agents[i]
             if not agent:
@@ -583,7 +585,7 @@ class Game:
                 self.unmute()
                 self._agentCrash(i, quiet=True)
                 return
-            if ("registerInitialState" in dir(agent)):
+            if ("registerInitialState" in dir(agent)): #only pacman has this method
                 self.mute(i)
                 if self.catchExceptions:
                     try:
@@ -604,6 +606,7 @@ class Game:
                         self.unmute()
                         return
                 else:
+                    #print("[Game::run]: agent.registerInitialState = %s\n" % agent)
                     agent.registerInitialState(self.state.deepCopy())
                 ## TODO: could this exceed the total time
                 self.unmute()
@@ -700,6 +703,7 @@ class Game:
                 self.state = self.state.generateSuccessor( agentIndex, action )
 
             # Change the display
+            #print("[Game::run] display update.\n")
             self.display.update( self.state.data )
             ###idx = agentIndex - agentIndex % 2 + 1
             ###self.display.update( self.state.makeObservation(idx).data )

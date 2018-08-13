@@ -208,9 +208,12 @@ class ReinforcementAgent(ValueEstimationAgent):
             This is where we ended up after our last action.
             The simulation should somehow ensure this is called
         """
+        #print("[ReinforcementAgent::]observationFunction old stat = %s\n" % state )
         if not self.lastState is None:
             reward = state.getScore() - self.lastState.getScore()
             self.observeTransition(self.lastState, self.lastAction, state, reward)
+
+        #print("[ReinforcementAgent::]observationFunction new stat = %s\n" % state)
         return state
 
     def registerInitialState(self, state):
